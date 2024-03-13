@@ -1,6 +1,7 @@
-import Catalog from "../../features/catalog/Catalog";
+ import Catalog from "../../features/catalog/Catalog";
 import { Container, CssBaseline} from "@mui/material";
 import Header from "./Header";
+import { Outlet } from "react-router-dom";
 
 
 function App() {
@@ -10,7 +11,7 @@ return(
       <CssBaseline />
       <Header/>
       <Container>
-        <Catalog />
+        <Outlet/>
       </Container>
     </>
   );
