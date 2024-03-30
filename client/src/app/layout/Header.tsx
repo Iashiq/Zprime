@@ -1,6 +1,11 @@
 import { ShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, IconButton, List, ListItem, Toolbar, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { link } from "fs";
+import { useState, useEffect } from "react";
+import { Link, NavLink } from "react-router-dom";
+import agent from "../api/agent";
+import { getCookie } from "../util/util";
+import { Basket } from "../models/Basket";
 
 const midLinks = [
     {title: 'catalog', path: '/catalog'},
@@ -27,6 +32,23 @@ const navStyles = {
 }
 
 export default function Header(){
+   
+    const [basket, setBasket] = useState<Basket>();
+    const [loading, setLoading] = useState(true);
+
+    const buyerId = getCookie('buyerId');
+
+    if(buyerId)
+    {
+        agent.Basket.get()
+        .then(basket => setBasket(basket))
+        .catch(error => console.log(error))
+        .finally(() => setLoading(false));
+    }
+
+    const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+
+
     return(
         <AppBar position="static" sx={{mb: 4}}>
             <Toolbar sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -54,8 +76,8 @@ export default function Header(){
                 </List>
 
                 <Box display='flex' alignItems='center'>
-                <IconButton size='large' edge='start' color='inherit' sx={{mr: 2}}>
-                    <Badge badgeContent='4'color="secondary">
+                <IconButton component={Link} to="/basket" size='large' edge='start' color='inherit' sx={{mr: 2}}>
+                    <Badge badgeContent={itemCount} color="secondary">
                         <ShoppingCart />
                     </Badge>
                 </IconButton>

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,17 +23,20 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder =>
+        builder => 
         {
             builder.WithOrigins("http://localhost:3000")
                    .AllowAnyMethod()
+                   .AllowCredentials()
                    .AllowAnyHeader();
         });
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline. 
+app.UseMiddleware<API.Middleware.ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
