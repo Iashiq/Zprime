@@ -6,6 +6,8 @@ import { Link, NavLink } from "react-router-dom";
 import agent from "../api/agent";
 import { getCookie } from "../util/util";
 import { Basket } from "../models/Basket";
+import { useAppSelector } from "../store/configureStore";
+import { setBasket } from "../../features/Basket/basketSlice";
 
 const midLinks = [
     {title: 'catalog', path: '/catalog'},
@@ -33,7 +35,7 @@ const navStyles = {
 
 export default function Header(){
    
-    const [basket, setBasket] = useState<Basket>();
+    const {basket} = useAppSelector(state => state.basket);
     const [loading, setLoading] = useState(true);
 
     const buyerId = getCookie('buyerId');

@@ -3,14 +3,27 @@ import Header from "./Header";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import  'react-toastify/dist/ReactToastify.css'; 
-import { useEffect, useState } from "react";
+import { setBasket } from "../../features/Basket/basketSlice";
 import { getCookie } from "../util/util";
 import agent from "../api/agent";
-import { error } from "console";
+import { useAppDispatch } from "../store/configureStore";
+import { useEffect } from "react";
 
 
 function App() {
 
+  const dispatch = useAppDispatch();
+
+  useEffect(() =>{
+    const buyerId = getCookie('buyerId');
+    if(buyerId)
+    {
+        agent.Basket.get()
+        .then(basket => dispatch(setBasket(basket)))
+        .catch(error => console.log(error))
+    }
+  
+  }, [dispatch])
 
 
 return(

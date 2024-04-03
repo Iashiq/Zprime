@@ -1,21 +1,10 @@
-import { TableContainer, Paper, Table, TableBody, TableRow, TableCell, Typography } from "@mui/material";
-import { useState } from "react";
-import agent from "../../app/api/agent";
-import { Basket } from "../../app/models/Basket";
-import { currencyFormat, getCookie } from "../../app/util/util";
+import { TableContainer, Paper, Table, TableBody, TableRow, TableCell  } from "@mui/material";
+import { currencyFormat } from "../../app/util/util";
+import { useAppSelector } from "../../app/store/configureStore";
 
 export default function BasketSummary() {
-    const [basket, setBasket] = useState<Basket>();
+    const {basket} = useAppSelector(state => state.basket);
     
-
-    const buyerId = getCookie('buyerId');
-
-    if(buyerId)
-    {
-        agent.Basket.get()
-        .then(basket => setBasket(basket))
-        .catch(error => console.log(error))
-    }
 
     const subtotal = basket?.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
     const deliveryFee = subtotal > 10000 ? 0 : 500;

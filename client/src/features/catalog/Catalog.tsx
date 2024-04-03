@@ -1,17 +1,18 @@
- import agent from "../../app/api/agent";
-import { Product } from "../../app/models/Product"
-import ProductList from "./ProductList";
-import { useState, useEffect } from "react";
+ import ProductList from "./ProductList";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { fetchProductsAsync, productSelector } from "./catalogSlice";
 
 
 
 export default function Catalog(){
-
-    const [products, setProducts] = useState<Product[]>([]);  
-
+  const products = useAppSelector(productSelector.selectAll); 
+  const {productsLoaded} = useAppSelector(state => state.catalog);
+  const dispatch = useAppDispatch();
+ 
   useEffect(() => {
-    agent.Catalog.list().then(products => setProducts(products))
-  }, [])
+    if(!productsLoaded) dispatch(fetchProductsAsync());
+  }, [productsLoaded])
 
     return(
     <>

@@ -3,26 +3,20 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../app/models/Product"; 
 import agent from "../../app/api/agent";
-import { currencyFormat, getCookie } from "../../app/util/util";
-import { Basket } from "../../app/models/Basket";
-import { error } from "console";
-export default function ProductDetails()
-{
+import { currencyFormat } from "../../app/util/util";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import {addBasketItemAsync, removeBasketItemAsync, setBasket } from "../Basket/basketSlice";
+
+
+export default function ProductDetails(){
 
 const {id} = useParams<{id: string}>();
 const [product, setProduct] = useState<Product | null>(null); 
 const [loading, setLoading] = useState(true);
 const [quantity, setQuantity] = useState(0);
-const [submitting, setSubmitting] = useState(false);
-const [basket, setBasket] = useState<Basket>();
-const buyerId = getCookie('buyerId');
-
-    if(buyerId)
-    {
-        agent.Basket.get()
-        .then(basket => setBasket(basket))
-        .catch(error => console.log(error))
-    }
+const {basket, status} = useAppSelector(state => state.basket);
+const dispatch = useAppDispatch();
+ 
 const item = basket?.items.find(i => i.productId===product?.id);
 
 useEffect(() =>{
@@ -36,18 +30,6 @@ useEffect(() =>{
 }, [id, item, quantity])
 
 
-function removeItem(productId: number, quantity: number){
-    if(!basket) return;
-    const items = [...basket.items];
-    const itemIndex = items.findIndex(i => i.productId===productId);
-    if(itemIndex >=0){
-      items[itemIndex].quantity -= quantity;
-      if(items[itemIndex].quantity===0) items.splice(itemIndex,1);
-      setBasket(prevState => {
-        return {...prevState!, items}
-      })
-    }
-  }
 
 function handleInputChange(event: any){
     const value = parseInt(event.target.value);
@@ -58,20 +40,13 @@ function handleInputChange(event: any){
 }
 
 function handleUpdateCart(){
-    setSubmitting(true);
     if(!item || quantity > item.quantity){
         const updateQuantity = item ? quantity - item.quantity : quantity;
-        agent.Basket.addItem(product?.id!, updateQuantity)
-        .then(basket => setBasket(basket))
-        .catch(error => console.log(error))
-        .finally(() => setSubmitting(false));
+        dispatch(addBasketItemAsync({productId: product?.id, quantity: updateQuantity}))
     }
     else{
         const updateQuantity = item.quantity - quantity;
-        agent.Basket.removeItem(product?.id!, updateQuantity)
-        .then(() => removeItem(product?.id!, updateQuantity))
-        .catch(error => console.log(error))
-        .finally(() => setSubmitting(false)) ;
+        dispatch(removeBasketItemAsync({productId: product?.id, quantity: updateQuantity}))
     }
 }
 
@@ -120,7 +95,8 @@ if(!product) return <h3>Product not found</h3>
                     </Grid>
                     <Grid item xs={6}>
                         <Button
-                        disabled={item?.quantity===quantity}
+                           disabled={item?.quantity===quantity}
+                           //loading={status.includes('pendingRemoveItem' + item.productId)}
                            onClick={handleUpdateCart}
                            sx={{height: '55px'}} 
                            color='primary'
