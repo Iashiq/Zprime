@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { PaginatedResponse } from "../models/Pagination";
 
 axios.defaults.baseURL = 'http://localhost:5223/api';
 axios.defaults.withCredentials = true;
@@ -8,7 +9,15 @@ const resposeBody = (response: AxiosResponse) => response.data;
 
 
 
-axios.interceptors.response.use(response => {
+axios.interceptors.response.use( async response => {
+    //await sleep();
+    const pagination = response.headers['pagination'];
+    
+    if(pagination) {
+        response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+        return response;
+    }
+
     return response
 }, (error: AxiosError) => {
      const {data, status} = error.response as AxiosResponse;
@@ -39,15 +48,16 @@ axios.interceptors.response.use(response => {
 
 const requests = 
 {
-    get: (url: string) => axios.get(url).then(resposeBody),
-    post: (url: string, body: {}) => axios.post(url).then(resposeBody),
-    put: (url: string,body: {}) => axios.put(url).then(resposeBody),
+    get: (url: string, params?: URLSearchParams) => axios.get(url,{params}).then(resposeBody),
+    post: (url: string, body: {}) => axios.post(url,body).then(resposeBody),
+    put: (url: string,body: {}) => axios.put(url, body).then(resposeBody),
     delete : (url: string) => axios.delete(url).then(resposeBody),
 }
 
 const Catalog = {
-    list: () => requests.get('products'),
-    details: (id: number) =>requests.get(`products/${id}`)
+    list: (params: URLSearchParams) => requests.get('products', params),
+    details: (id: number) =>requests.get(`products/${id}`),
+    fetchFilters: () => requests.get('products/filters')
 }
 
 
@@ -72,3 +82,5 @@ const agent = {
 }
 
 export default agent;
+
+
