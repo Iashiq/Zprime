@@ -2,3 +2,9 @@
 
 # CA1848: Use the LoggerMessage delegates
 dotnet_diagnostic.CA1848.severity = none
+
+# IDE0055: Fix formatting
+dotnet_diagnostic.IDE0055.severity = error
+
+# IDE0011: Add braces
+dotnet_diagnostic.IDE0011.severity = error
