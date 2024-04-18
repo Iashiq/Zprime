@@ -6,6 +6,8 @@ import ProductDetails from "../../features/catalog/ProductDetails";
 import AboutPage from "../../features/about/AboutPage";
 import ContactPage from "../../features/contact/ContactPage";
 import BasketPage from "../../features/Basket/BasketPage";
+import Login from "../../features/account/Login";
+import Register from "../../features/account/Register";
 
 export const router = createBrowserRouter([
     {
@@ -17,7 +19,10 @@ export const router = createBrowserRouter([
             {path: 'catalog/:id', element: <ProductDetails />},
             {path: 'about', element: <AboutPage/>},
             {path: 'contact',element: <ContactPage/>},
-            {path: 'basket', element: <BasketPage />}
+            { path: 'basket', element: <BasketPage /> },
+            { path: 'login', element: <Login /> },
+            {path: 'register', element: <Register />}
+
         ]
     }
 ])

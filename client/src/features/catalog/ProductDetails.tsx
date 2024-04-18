@@ -5,7 +5,7 @@ import { Product } from "../../app/models/Product";
 import agent from "../../app/api/agent";
 import { currencyFormat } from "../../app/util/util";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import {addBasketItemAsync, removeBasketItemAsync, setBasket } from "../Basket/basketSlice";
+import {addBasketItemAsync, removeBasketItemAsync } from "../Basket/basketSlice";
 
 
 export default function ProductDetails(){
@@ -14,7 +14,7 @@ const {id} = useParams<{id: string}>();
 const [product, setProduct] = useState<Product | null>(null); 
 const [loading, setLoading] = useState(true);
 const [quantity, setQuantity] = useState(0);
-const {basket, status} = useAppSelector(state => state.basket);
+const {basket} = useAppSelector(state => state.basket);
 const dispatch = useAppDispatch();
  
 const item = basket?.items.find(i => i.productId===product?.id);

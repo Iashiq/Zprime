@@ -1,14 +1,13 @@
 import { useState } from "react"
-import agent from "../../app/api/agent";
 import { Box, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Add, Delete, Remove } from "@mui/icons-material";
 import BasketSummary from "./BasketSummary";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { addBasketItemAsync, removeBasketItemAsync, setBasket } from "./basketSlice";
+import { addBasketItemAsync, removeBasketItemAsync } from "./basketSlice";
 
 export default function BasketPage(){
-    const [loading, setLoading] = useState(true);
-    const {basket, status} = useAppSelector(state => state.basket);
+   
+    const {basket} = useAppSelector(state => state.basket);
     const dispatch = useAppDispatch();
 
     

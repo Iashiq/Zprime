@@ -1,13 +1,12 @@
 import { ShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, IconButton, List, ListItem, Toolbar, Typography } from "@mui/material";
-import { link } from "fs";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import agent from "../api/agent";
 import { getCookie } from "../util/util";
-import { Basket } from "../models/Basket";
 import { useAppSelector } from "../store/configureStore";
 import { setBasket } from "../../features/Basket/basketSlice";
+import SignedInMenu from "./SignedInMenu";
 
 const midLinks = [
     {title: 'catalog', path: '/catalog'},
@@ -37,6 +36,7 @@ export default function Header(){
    
     const {basket} = useAppSelector(state => state.basket);
     const [loading, setLoading] = useState(true);
+    const { user } = useAppSelector(state => state.account);
 
     const buyerId = getCookie('buyerId');
 
@@ -83,18 +83,23 @@ export default function Header(){
                         <ShoppingCart />
                     </Badge>
                 </IconButton>
-
-                <List sx={{display: 'flex'}}>
-                    {rightLinks.map(({title, path}) =>
-                    <ListItem 
-                    component={NavLink} 
-                    to={path} 
-                    key={path} 
-                    sx={navStyles}
-                >
+                
+                    {user ? (
+                        <SignedInMenu />
+                    ) : (
+                        <List sx={{display: 'flex'}}>
+                            {rightLinks.map(({title, path}) =>
+                            <ListItem 
+                            component={NavLink} 
+                            to={path} 
+                            key={path} 
+                            sx={navStyles}
+                        >
                         {title.toUpperCase()}
-                    </ListItem>)}
-                </List>
+                          </ListItem>)}
+                         </List>    
+                    )}
+                
                 </Box>
                 
             </Toolbar>

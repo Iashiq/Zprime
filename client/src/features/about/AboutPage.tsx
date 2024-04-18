@@ -2,8 +2,8 @@ import { Button, ButtonGroup, Container, Typography } from "@mui/material";
 import agent from "../../app/api/agent";
 
 export default function AboutPage()
-{
-    return(
+{ 
+    return( 
        <Container>
         <Typography gutterBottom variant="h4">Errors for testing purposes</Typography>
         <ButtonGroup>

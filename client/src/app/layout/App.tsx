@@ -3,27 +3,29 @@ import Header from "./Header";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import  'react-toastify/dist/ReactToastify.css'; 
-import { setBasket } from "../../features/Basket/basketSlice";
-import { getCookie } from "../util/util";
-import agent from "../api/agent";
+import { fetchBasketAsync } from "../../features/Basket/basketSlice";
 import { useAppDispatch } from "../store/configureStore";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
 
 
 function App() {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() =>{
-    const buyerId = getCookie('buyerId');
-    if(buyerId)
-    {
-        agent.Basket.get()
-        .then(basket => dispatch(setBasket(basket)))
-        .catch(error => console.log(error))
+  const initApp =  useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchBasketAsync());
+      
+    } catch (error) {
+      console.log(error);
     }
-  
   }, [dispatch])
+
+  useEffect(() => {
+    initApp();
+  }, [initApp])
 
 
 return(

@@ -3,14 +3,13 @@ import { Product } from "../../app/models/Product";
 import { Link } from "react-router-dom";
 import { currencyFormat } from "../../app/util/util";
 import { addBasketItemAsync } from "../Basket/basketSlice";
-import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { useAppDispatch } from "../../app/store/configureStore";
 
 interface Props{
     product: Product;
 }
 
 export default function ProductCard({product}: Props) {
-  const {status} = useAppSelector(state => state.basket);
   const dispatch = useAppDispatch();
 
  
