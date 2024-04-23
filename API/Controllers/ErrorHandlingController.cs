@@ -3,24 +3,24 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace API.Controllers
 {
-    public class ErrorHandlingController: BaseApiController
+    public class ErrorHandlingController : BaseApiController
     {
         [HttpGet("not-found")]
         public ActionResult GetNotFound()
         {
-            return NotFound(); 
+            return NotFound();
         }
 
         [HttpGet("bad-request")]
         public ActionResult GetBadRequest()
         {
-            return BadRequest(new ProblemDetails{Title = "This is a bad request"}); 
+            return BadRequest(new ProblemDetails { Title = "This is a bad request" });
         }
 
         [HttpGet("unauthorized")]
         public ActionResult GetUnauthorized()
         {
-            return Unauthorized(); 
+            return Unauthorized();
         }
 
         [HttpGet("validation-error")]
@@ -34,7 +34,7 @@ namespace API.Controllers
         [HttpGet("server-error")]
         public ActionResult GetServerError()
         {
-            throw new Exception("This is a server error"); 
+            throw new Exception("This is a server error");
         }
     }
 }
