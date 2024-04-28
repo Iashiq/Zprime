@@ -9,8 +9,8 @@ import BasketPage from "../../features/Basket/BasketPage";
 import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
 import RequireAuth from "./RequireAuth";
-import CheckoutPage from "../../features/checkout/CheckoutPage";
 import Orders from "../../features/orders/Orders";
+import CheckoutWrapper from "../../features/checkout/CheckoutWrapper";
 
 
 export const router = createBrowserRouter([
@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
             { path: 'basket', element: <BasketPage /> },
             { path: 'login', element: <Login /> },
             { path: 'register', element: <Register /> },
-            { path: 'checkout', element: <CheckoutPage /> },
+            { path: 'checkout', element: <CheckoutWrapper /> },
             { path: 'orders', element: <Orders /> }
             
 

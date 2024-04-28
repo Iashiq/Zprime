@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>c76493bf-a8d2-411e-9c9c-e61de14f794f</UserSecretsId>
   </PropertyGroup> 
 
   <ItemGroup>
@@ -15,6 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.4" />
+    <PackageReference Include="Stripe.net" Version="44.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
   </ItemGroup>
